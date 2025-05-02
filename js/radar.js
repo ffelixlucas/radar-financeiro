@@ -1,4 +1,4 @@
-const BACKEND_URL = "https://b7fa-187-55-77-32.ngrok-free.app/";
+const BACKEND_URL = "http://localhost:5000/";
 
 
 // 🔄 Carrega as ações de maior peso no índice (dados reais do backend)
