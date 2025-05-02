@@ -1,0 +1,90 @@
+.thermometer-container {
+    perspective: 1000px;
+  }
+  .thermometer {
+    background: linear-gradient(
+      to top,
+      #3b82f6 0%,
+      #ef4444 50%,
+      #10b981 100%
+    );
+    background-size: 100% 200%;
+    transition: all 1s ease;
+    transform-style: preserve-3d;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+  }
+  .thermometer::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.3) 0%,
+      rgba(255, 255, 255, 0) 50%
+    );
+    border-radius: 9999px;
+  }
+  .market-hot {
+    animation: pulseHot 2s infinite;
+  }
+  .market-cold {
+    animation: pulseCold 2s infinite;
+  }
+  @keyframes pulseHot {
+    0% {
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.8);
+    }
+    100% {
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+  }
+  @keyframes pulseCold {
+    0% {
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
+    }
+    100% {
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+    }
+  }
+  .stock-card {
+    transition: all 0.3s ease;
+    transform: translateY(0);
+  }
+  .stock-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+  }
+  .glow-text {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+  }
+  .tradingview-widget-container {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  .blinking::after {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 20px;
+    margin-left: 4px;
+    background-color: #ccc;
+    animation: blink 0.8s steps(2, start) infinite;
+    vertical-align: bottom;
+  }
+  
+  @keyframes blink {
+    to {
+      visibility: hidden;
+    }
+  }
+  

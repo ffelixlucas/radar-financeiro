@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Radar Financeiro | Termômetro do Mini Índice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="css/radar.css" />
+  </head>
+  <body class="bg-gray-900 text-gray-100 font-sans">
+    <!-- Header -->
+    <header
+      class="bg-gradient-to-r from-gray-800 to-gray-900 border-b border-gray-700"
+    >
+      <div class="max-w-7xl mx-auto px-4 py-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="flex items-center mb-4 md:mb-0">
+            <div class="bg-blue-600 p-2 rounded-lg mr-3">
+              <i class="fas fa-chart-line text-white text-xl"></i>
+            </div>
+            <div>
+              <h1 class="text-xl font-bold">Radar Financeiro</h1>
+              <p class="text-sm text-gray-400">Termômetro do Mini Índice</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-4 text-center md:text-left">
+            <div>
+              <p class="text-gray-400 text-sm">IBOV</p>
+              <p class="font-bold text-green-400">+1.25%</p>
+            </div>
+            <div>
+              <p class="text-gray-400 text-sm">DÓLAR</p>
+              <p class="font-bold text-red-400">-0.32%</p>
+            </div>
+            <div>
+              <p class="text-gray-400 text-sm">S&P 500</p>
+              <p class="font-bold text-green-400">+0.78%</p>
+            </div>
+          </div>
+
+          <div class="hidden md:flex items-center space-x-4">
+            <span
+              id="market-time"
+              class="bg-gray-700 px-3 py-1 rounded-full text-sm"
+              >10:45:23</span
+            >
+            <button
+              class="bg-blue-600 hover:bg-blue-700 px-4 py-1 rounded-full text-sm font-medium transition"
+              id="update-button"
+            >
+              <i class="fas fa-sync-alt mr-1"></i> Atualizar
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-6">
+      <!-- Termômetro + Gráfico TradingView -->
+      <section class="mb-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Termômetro -->
+          <div class="bg-gray-800 rounded-xl p-6 shadow-lg">
+            <h2 class="text-lg font-bold mb-4 flex items-center">
+              <i class="fas fa-fire mr-2 text-orange-400"></i> Termômetro do
+              Mercado
+            </h2>
+            <div class="thermometer-container flex flex-col items-center">
+              <div
+                id="market-thermometer"
+                class="thermometer w-24 h-64 rounded-full mb-4 relative overflow-hidden"
+              >
+                <div
+                  class="absolute bottom-0 left-0 right-0 bg-gray-900 bg-opacity-30 h-1/3"
+                ></div>
+                <div
+                  class="absolute top-0 left-0 right-0 flex items-center justify-center pt-4"
+                >
+                  <span
+                    id="market-temp"
+                    class="text-white font-bold text-xl glow-text"
+                    >0°</span
+                  >
+                </div>
+              </div>
+              <div id="market-message" class="text-center">
+                <h3 class="text-2xl font-bold mb-2">Mercado Neutro</h3>
+                <p class="text-gray-400">Índice oscilando sem direção clara</p>
+              </div>
+              <p id="last-update-time" class="text-sm text-gray-400 mt-1">
+                Última atualização: --
+              </p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-gray-700">
+              <div class="flex justify-between text-sm">
+                <span class="text-red-400"
+                  ><i class="fas fa-arrow-down mr-1"></i> Vendedores</span
+                >
+                <span class="text-gray-400">Neutro</span>
+                <span class="text-green-400"
+                  ><i class="fas fa-arrow-up mr-1"></i> Compradores</span
+                >
+              </div>
+              <div class="w-full bg-gray-700 rounded-full h-2 mt-2">
+                <div
+                  id="market-bias-bar"
+                  class="bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 h-2 rounded-full"
+                  style="width: 50%"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TradingView Gráfico Integrado -->
+          <div
+            class="bg-gray-800 rounded-xl p-6 shadow-lg lg:col-span-2 overflow-hidden"
+          >
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-lg font-bold flex items-center">
+                <i class="fas fa-chart-bar mr-2 text-blue-400"></i> Mini Índice
+                (15min)
+              </h2>
+            </div>
+
+            <div class="tradingview-widget-container" style="height: 500px">
+              <div id="tradingview_win1_chart" style="height: 100%"></div>
+              <script
+                type="text/javascript"
+                src="https://s3.tradingview.com/tv.js"
+              ></script>
+              <script type="text/javascript">
+                new TradingView.widget({
+                  container_id: "tradingview_win1_chart",
+                  width: "100%",
+                  height: "100%",
+                  symbol: "BMFBOVESPA:WIN1!",
+                  interval: "15",
+                  timezone: "America/Sao_Paulo",
+                  theme: "dark",
+                  style: "1",
+                  locale: "br",
+                  backgroundColor: "#1f2937", // ← cor de fundo igual ao seu painel
+                  gridColor: "#374151", // ← grelha discreta
+                  hide_top_toolbar: true, // ← remove barra superior
+                  hide_legend: true, // ← remove legenda lateral
+                  allow_symbol_change: false, // ← impede trocar ativo
+                  enable_publishing: false,
+                  save_image: false,
+                });
+              </script>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 🧠 Análise da IA -->
+<div class="bg-gray-800 rounded-xl p-6 shadow-lg mt-6">
+  <div class="flex items-center mb-4">
+    <i class="fas fa-robot text-green-400 text-2xl mr-2"></i>
+    <h2 class="text-lg font-bold text-gray-200">Leitura da IA do Mercado</h2>
+  </div>
+  <p id="texto-ia" class="text-gray-300 leading-relaxed whitespace-pre-line"></p>
+</div>
+
+
+      <!-- Ações com maior peso -->
+      <section class="mb-8">
+        <h2 class="text-xl font-bold mb-4 flex items-center">
+          <i class="fas fa-star mr-2 text-yellow-400"></i> Ações com Maior Peso
+          no Índice
+        </h2>
+        <div
+          id="acoes-container"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
+        >
+          <!-- Stock Cards via JS -->
+        </div>
+      </section>
+
+      <!-- Notícias do mercado -->
+      <section>
+        <h2 class="text-xl font-bold mb-4 flex items-center">
+          <i class="fas fa-newspaper mr-2 text-blue-400"></i> Notícias que Movem
+          o Mercado
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- News Cards via JS -->
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 border-t border-gray-700 py-6">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0">
+            <div class="flex items-center">
+              <div class="bg-blue-600 p-2 rounded-lg mr-3">
+                <i class="fas fa-chart-line text-white"></i>
+              </div>
+              <span class="font-bold">Radar Financeiro</span>
+            </div>
+            <p class="text-sm text-gray-400 mt-1">
+              Termômetro do Mini Índice em tempo real
+            </p>
+          </div>
+
+          <div class="flex space-x-6">
+            <a href="#" class="text-gray-400 hover:text-white transition"
+              >Termos</a
+            >
+            <a href="#" class="text-gray-400 hover:text-white transition"
+              >Privacidade</a
+            >
+            <a href="#" class="text-gray-400 hover:text-white transition"
+              >Sobre</a
+            >
+            <a href="#" class="text-gray-400 hover:text-white transition"
+              >Contato</a
+            >
+          </div>
+
+          <div class="flex space-x-4 mt-4 md:mt-0">
+            <a
+              href="#"
+              class="w-10 h-10 bg-gray-700 hover:bg-blue-600 rounded-full flex items-center justify-center text-white transition"
+            >
+              <i class="fab fa-telegram"></i>
+            </a>
+            <a
+              href="#"
+              class="w-10 h-10 bg-gray-700 hover:bg-blue-600 rounded-full flex items-center justify-center text-white transition"
+            >
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a
+              href="#"
+              class="w-10 h-10 bg-gray-700 hover:bg-blue-600 rounded-full flex items-center justify-center text-white transition"
+            >
+              <i class="fab fa-twitter"></i>
+            </a>
+          </div>
+        </div>
+        <div
+          class="border-t border-gray-700 mt-6 pt-6 text-center text-sm text-gray-500"
+        >
+          <p>
+            © 2023 Radar Financeiro. Dados com delay de 15 minutos. Não é
+            recomendação de investimento.
+          </p>
+          <p class="mt-1">
+            Desenvolvido para traders e investidores que buscam insights de
+            mercado.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/radar.js"></script>
+  </body>
+</html>
