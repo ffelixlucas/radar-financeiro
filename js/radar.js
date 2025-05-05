@@ -1,4 +1,5 @@
-const BACKEND_URL = "https://sistema-login-production.up.railway.app";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 
 
 // 🔄 Carrega as ações de maior peso no índice (dados reais do backend)
