@@ -1,6 +1,4 @@
-const BACKEND_URL = window.BACKEND_URL || "https://sistema-login-production.up.railway.app";
-
-
+const BACKEND_URL = "https://sistema-login-production.up.railway.app";
 
 // 🔄 Carrega as ações de maior peso no índice (dados reais do backend)
 function carregarAcoesReais() {
