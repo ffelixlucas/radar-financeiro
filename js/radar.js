@@ -1,5 +1,45 @@
 const BACKEND_URL = "https://sistema-login-production.up.railway.app";
 
+async function carregarIndicesGlobais() {
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/market/indices`);
+    const indices = await response.json();
+
+    const container = document.getElementById("indices-header");
+    container.innerHTML = "";
+
+    const nomesDesejados = ["IBOVESPA", "DOLAR", "SP500"];
+
+    nomesDesejados.forEach((chave) => {
+      const indice = indices[chave];
+      if (!indice) return;
+
+      const variacao = parseFloat(indice.variacao.replace(",", "."));
+      const corClasse =
+        variacao > 0 ? "text-green-400" : variacao < 0 ? "text-red-400" : "text-yellow-400";
+
+      const nomeCurto =
+        chave === "IBOVESPA"
+          ? "IBOV"
+          : chave === "DOLAR"
+          ? "DÓLAR"
+          : chave === "SP500"
+          ? "S&P 500"
+          : indice.nome;
+
+      const card = document.createElement("div");
+      card.innerHTML = `
+        <p class="text-gray-400 text-sm">${nomeCurto}</p>
+        <p class="font-bold ${corClasse}">${indice.variacao}</p>
+      `;
+      container.appendChild(card);
+    });
+  } catch (error) {
+    console.error("❌ Erro ao carregar índices globais:", error);
+  }
+}
+
+
 // 🔄 Carrega as ações de maior peso no índice (dados reais do backend)
 function carregarAcoesReais() {
   fetch(`${BACKEND_URL}/api/market/ibov`)
@@ -127,6 +167,7 @@ const marketStatuses = [
 
 // 🚀 Ao carregar a página:
 document.addEventListener("DOMContentLoaded", function () {
+  carregarIndicesGlobais();
   carregarAcoesReais();
   buscarVariaçãoIBOV();
   carregarAnaliseIA();
