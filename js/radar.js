@@ -1,4 +1,4 @@
-const BACKEND_URL = "http://localhost:5000/";
+const BACKEND_URL = "https://sistema-login-production.up.railway.app";
 
 
 // 🔄 Carrega as ações de maior peso no índice (dados reais do backend)
